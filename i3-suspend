@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+
+NOTIF_TITLE="Suspend"
+NOTIF_BODY="现在您可以安全地关闭计算机了"
+NOTIF_DELAY=5
+SLEEP_DELAY=0.2
+
+scrot /tmp/lockscreen.png
+notify-send -t $NOTIF_DELAY "$NOTIF_TITLE" "$NOTIF_BODY" || kdialog --passivepopup "$NOTIF_BODY" $NOTIF_DELAY
+mogrify -scale 50% -gaussian-blur 0x4 -gamma 0.8 -scale 200% /tmp/lockscreen.png
+i3lock -i /tmp/lockscreen.png
+sleep $SLEEP_DELAY
+xset dpms force off
+systemctl suspend
